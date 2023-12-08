@@ -62,7 +62,13 @@ class CocoDatasetKarpathy:
         for json_item in json_file:
             new_item = dict()
 
-            new_item['img_path'] = self.images_path + json_item['filepath'] + '/img/' + json_item['filename']
+            # new_item['img_path'] = self.images_path + json_item['filepath'] + '/img/' + json_item['filename']
+            new_item['img_path'] = self.images_path + json_item['filepath']  +'/'+ json_item['filename']
+
+
+
+
+
 
             new_item_captions = [item['raw'] for item in json_item['sentences']]
             new_item['img_id'] = json_item['cocoid']
@@ -186,7 +192,6 @@ class CocoDatasetKarpathy:
         else:
             img_path = self.karpathy_train_list[img_idx]['img_path']
             img_id = self.karpathy_train_list[img_idx]['img_id']
-
         return img_path, img_id
 
     def get_all_images_captions(self, dataset_split):

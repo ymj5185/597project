@@ -93,6 +93,7 @@ def generate_data(path_args):
         for i in range(coco_dataset.train_num_images):
            img_path, img_id = coco_dataset.get_image_path(coco_dataset.train_num_images - i - 1,
                                                           CocoDatasetKarpathy.TrainSet_ID)
+
            output = apply_model(model, img_path)
            hdf5_file.create_dataset(str(img_id) + '_features', data=np.array(output.cpu()))
            if (i+1) % 5000 == 0 or (i+1) == coco_dataset.train_num_images:

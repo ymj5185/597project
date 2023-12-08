@@ -390,7 +390,7 @@ if __name__ == "__main__":
     parser.add_argument('--drop_other', type=float, default=0.1)
 
     parser.add_argument('--optim_type', type=optim_type_choice, default='adam')
-    parser.add_argument('--sched_type', type=scheduler_type_choice, default='fixed')
+    parser.add_argument('--sched_type', type=scheduler_type_choice, default='annealing')
 
     parser.add_argument('--lr', type=float, default=2e-4)
     parser.add_argument('--min_lr', type=float, default=5e-7)
@@ -398,7 +398,7 @@ if __name__ == "__main__":
     parser.add_argument('--anneal_coeff', type=float, default=0.8)
     parser.add_argument('--anneal_every_epoch', type=float, default=3.0)
 
-    parser.add_argument('--batch_size', type=int, default=64)
+    parser.add_argument('--batch_size', type=int, default=32)
     parser.add_argument('--num_accum', type=int, default=1)
     parser.add_argument('--num_gpus', type=int, default=1)
     parser.add_argument('--ddp_sync_port', type=int, default=12354)
