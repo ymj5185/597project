@@ -5,7 +5,6 @@ from models.captioning_model import CaptioningModel
 
 import torch.nn as nn
 
-
 class ExpansionNet_v2(CaptioningModel):
     def __init__(self, d_model, N_enc, N_dec, ff, num_heads, num_exp_enc_list, num_exp_dec,
                  output_word2idx, output_idx2word, max_seq_len, drop_args, img_feature_dim=2048, rank=0):
@@ -21,8 +20,10 @@ class ExpansionNet_v2(CaptioningModel):
         self.N_dec = N_dec
         self.d_model = d_model
 
-        self.encoders = nn.ModuleList([EncoderLayer(d_model, ff, num_exp_enc_list, drop_args.enc) for _ in range(N_enc)])
-        self.decoders = nn.ModuleList([DecoderLayer(d_model, num_heads, ff, num_exp_dec, drop_args.dec) for _ in range(N_dec)])
+        self.encoders = nn.ModuleList(
+            [EncoderLayer(d_model, ff, num_exp_enc_list, drop_args.enc) for _ in range(N_enc)])
+        self.decoders = nn.ModuleList(
+            [DecoderLayer(d_model, num_heads, ff, num_exp_dec, drop_args.dec) for _ in range(N_dec)])
 
         self.input_embedder_dropout = nn.Dropout(drop_args.enc_input)
         self.input_linear = torch.nn.Linear(img_feature_dim, d_model)
@@ -64,15 +65,15 @@ class ExpansionNet_v2(CaptioningModel):
             x_list.append(x)
         x_list = torch.cat(x_list, dim=-1)
         x = x + self.out_enc_dropout(self.enc_reduce_group(x_list))
-        x = self.enc_reduce_norm(x) 
+        x = self.enc_reduce_norm(x)
         return x
 
     def forward_dec(self, cross_input, enc_input_num_pads, dec_input, dec_input_num_pads, apply_log_softmax=False):
 
         no_peak_and_pad_mask = create_no_peak_and_pad_mask(
-                                mask_size=(dec_input.size(0), dec_input.size(1), dec_input.size(1)),
-                                num_pads=torch.tensor(dec_input_num_pads),
-                                rank=self.rank)
+            mask_size=(dec_input.size(0), dec_input.size(1), dec_input.size(1)),
+            num_pads=torch.tensor(dec_input_num_pads),
+            rank=self.rank)
 
         pad_mask = create_pad_mask(mask_size=(dec_input.size(0), dec_input.size(1), cross_input.size(1)),
                                    pad_row=torch.tensor(dec_input_num_pads),

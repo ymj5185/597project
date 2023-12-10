@@ -28,7 +28,7 @@ if __name__ == "__main__":
     parser.add_argument('--max_seq_len', type=int, default=74)
     parser.add_argument('--image_path_1', type=str, default='./demo_material/tatin.jpg')
     parser.add_argument('--image_path_2', type=str, default='./demo_material/micheal.jpg')
-    parser.add_argument('--load_model_path', type=str, default='./github_ignore_material/saves/rf_model.pth')
+    parser.add_argument('--load_model_path', type=str, default='./github_ignore_material/saves/model.pth')
     parser.add_argument('--output_onnx_path', type=str, default='./rf_model.onnx')
     parser.add_argument('--onnx_simplify', type=bool, default=False)
     parser.add_argument('--onnx_runtime_test', type=bool, default=False)
