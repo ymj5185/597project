@@ -3,8 +3,11 @@
     In order to minimize the requirements, it runs only on CPU and images are
     processed one by one.
 """
-
+from PIL import Image
+import matplotlib
+import matplotlib.pyplot as plt
 import torch
+import numpy as np
 import argparse
 import pickle
 from argparse import Namespace
@@ -90,6 +93,9 @@ if __name__ == "__main__":
                             enc_x_num_pads=[0],
                             mode='beam_search', **beam_search_kwargs)
         pred = tokens2description(pred[0][0], coco_tokens['idx2word_list'], sos_idx, eos_idx)
-        print(path + ' \n\tDescription: ' + pred + '\n')
+        image = Image.open(path)
+        plt.imshow(np.asarray(image))
+        plt.show()
+        print('Description: ' + pred + '\n')
 
     print("Closed.")

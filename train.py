@@ -400,7 +400,7 @@ if __name__ == "__main__":
 
     parser.add_argument('--batch_size', type=int, default=32)
     parser.add_argument('--num_accum', type=int, default=1)
-    parser.add_argument('--num_gpus', type=int, default=1)
+    parser.add_argument('--num_gpus', type=int, default=3)
     parser.add_argument('--ddp_sync_port', type=int, default=12354)
     parser.add_argument('--save_path', type=str, default='./github_ignore_material/saves/')
     parser.add_argument('--save_every_minutes', type=int, default=25)
@@ -408,7 +408,7 @@ if __name__ == "__main__":
     parser.add_argument('--print_every_iter', type=int, default=1000)
 
     parser.add_argument('--eval_every_iter', type=int, default=999999)
-    parser.add_argument('--eval_parallel_batch_size', type=int, default=16)
+    parser.add_argument('--eval_parallel_batch_size', type=int, default=32)
     parser.add_argument('--eval_beam_sizes', type=str2list, default=[3])
 
     parser.add_argument('--reinforce', type=str2bool, default=False)

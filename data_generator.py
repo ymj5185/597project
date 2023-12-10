@@ -14,17 +14,17 @@ torch.autograd.set_detect_anomaly(False)
 torch.set_num_threads(1)
 torch.set_num_interop_threads(1)
 import functools
+
 print = functools.partial(print, flush=True)
 DEFAULT_RANK = 0
 
 
 def convert_time_as_hhmmss(ticks):
     return str(int(ticks / 60)) + " m " + \
-           str(int(ticks) % 60) + " s"
+        str(int(ticks) % 60) + " s"
 
 
 def generate_data(path_args):
-
     coco_dataset = CocoDatasetKarpathy(images_path=path_args.images_path,
                                        coco_annotations_path=args.captions_path + "dataset_coco.json",
                                        train2014_bboxes_path=args.captions_path + "train2014_instances.json",
@@ -36,13 +36,13 @@ def generate_data(path_args):
 
     from models.swin_transformer_mod import SwinTransformer
     model = SwinTransformer(
-            img_size=384, patch_size=4, in_chans=3,
-            embed_dim=192, depths=[2, 2, 18, 2], num_heads=[6, 12, 24, 48],
-            window_size=12, mlp_ratio=4., qkv_bias=True, qk_scale=None,
-            drop_rate=0.0, attn_drop_rate=0.0,
-            drop_path_rate=0.0,
-            norm_layer=torch.nn.LayerNorm, ape=False, patch_norm=True,
-            use_checkpoint=False)
+        img_size=384, patch_size=4, in_chans=3,
+        embed_dim=192, depths=[2, 2, 18, 2], num_heads=[6, 12, 24, 48],
+        window_size=12, mlp_ratio=4., qkv_bias=True, qk_scale=None,
+        drop_rate=0.0, attn_drop_rate=0.0,
+        drop_path_rate=0.0,
+        norm_layer=torch.nn.LayerNorm, ape=False, patch_norm=True,
+        use_checkpoint=False)
 
     def load_backbone_only_from_save(model, state_dict, prefix=None):
         own_state = model.state_dict()
@@ -91,33 +91,32 @@ def generate_data(path_args):
             return output.squeeze(0)
 
         for i in range(coco_dataset.train_num_images):
-           img_path, img_id = coco_dataset.get_image_path(coco_dataset.train_num_images - i - 1,
-                                                          CocoDatasetKarpathy.TrainSet_ID)
+            img_path, img_id = coco_dataset.get_image_path(coco_dataset.train_num_images - i - 1,
+                                                           CocoDatasetKarpathy.TrainSet_ID)
 
-           output = apply_model(model, img_path)
-           hdf5_file.create_dataset(str(img_id) + '_features', data=np.array(output.cpu()))
-           if (i+1) % 5000 == 0 or (i+1) == coco_dataset.train_num_images:
-               print("Train " + str(i+1) + " / " + str(coco_dataset.train_num_images) + " completed")
+            output = apply_model(model, img_path)
+            hdf5_file.create_dataset(str(img_id) + '_features', data=np.array(output.cpu()))
+            if (i + 1) % 5000 == 0 or (i + 1) == coco_dataset.train_num_images:
+                print("Train " + str(i + 1) + " / " + str(coco_dataset.train_num_images) + " completed")
 
         for i in range(coco_dataset.test_num_images):
             img_path, img_id = coco_dataset.get_image_path(i, CocoDatasetKarpathy.TestSet_ID)
             output = apply_model(model, img_path)
             hdf5_file.create_dataset(str(img_id) + '_features', data=np.array(output.cpu()))
-            if (i+1) % 2500 == 0 or (i+1) == coco_dataset.test_num_images:
-                print("Test " + str(i+1) + " / " + str(coco_dataset.test_num_images) + " completed")
+            if (i + 1) % 2500 == 0 or (i + 1) == coco_dataset.test_num_images:
+                print("Test " + str(i + 1) + " / " + str(coco_dataset.test_num_images) + " completed")
 
         for i in range(coco_dataset.val_num_images):
             img_path, img_id = coco_dataset.get_image_path(i, CocoDatasetKarpathy.ValidationSet_ID)
             output = apply_model(model, img_path)
             hdf5_file.create_dataset(str(img_id) + '_features', data=np.array(output.cpu()))
-            if (i+1) % 2500 == 0 or (i+1) == coco_dataset.test_num_images:
-                print("Val " + str(i+1) + " / " + str(coco_dataset.test_num_images) + " completed")
+            if (i + 1) % 2500 == 0 or (i + 1) == coco_dataset.test_num_images:
+                print("Val " + str(i + 1) + " / " + str(coco_dataset.test_num_images) + " completed")
 
     print("[GPU: " + str(DEFAULT_RANK) + " ] Closing...")
 
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(description='Image Captioning')
     parser.add_argument('--save_model_path', type=str, default='./github_ignore_material/saves/')
     parser.add_argument('--output_path', type=str, default='./github_ignore_material/raw_data/precalc_features.hdf5')
@@ -131,5 +130,3 @@ if __name__ == "__main__":
                           images_path=args.images_path,
                           captions_path=args.captions_path)
     generate_data(path_args=path_args)
-
-
