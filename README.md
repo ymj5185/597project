@@ -11,6 +11,8 @@
     test.py     evaluate model
     demo.ipynb  demo file
 ## how to run demo
+    download "https://drive.google.com/file/d/1VZpR0Ed0zmLzI37mWu5J9WSSYqZTkYkN/view?usp=drive_link"
+    put the file to the "./github_ignore_material/saves/"
     change the 'image_path' to the path of the image
 
 ## how to train
